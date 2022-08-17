@@ -1,0 +1,21 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
+spring:
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:${DATABASE_URL:mariadb://localhost:3300/microservices}
+    username: maria
+    password: maria
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDB103Dialect
+        format_sql: true
+    open-in-view: false
