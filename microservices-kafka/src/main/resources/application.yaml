@@ -1,0 +1,11 @@
+server:
+  port: 8088
+  error:
+    include-message: always
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST:kafka:9092}
+
+feign-client:
+  maria-host: ${MARIA_HOST:http://microservice-maria:8082}
