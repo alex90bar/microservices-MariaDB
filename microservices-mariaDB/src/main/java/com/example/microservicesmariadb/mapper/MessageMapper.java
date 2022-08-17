@@ -16,12 +16,13 @@ import org.mapstruct.Mapping;
 public interface MessageMapper {
 
   @Mapping(target = "id", ignore = true)
-  @Mapping(target = "MC1Timestamp", expression = "java(newTime())")
-  @Mapping(target = "MC2Timestamp", expression = "java(newTime())")
-  @Mapping(target = "MC3Timestamp", expression = "java(newTime())")
   MessageEntity toEntity(MessageDto dto);
+
+  MessageDto toDto(MessageEntity messageEntity);
 
   default ZonedDateTime newTime() {
     return ZonedDateTime.now();
   }
+
+
 }

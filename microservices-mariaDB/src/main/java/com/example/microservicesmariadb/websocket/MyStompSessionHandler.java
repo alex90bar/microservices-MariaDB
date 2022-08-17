@@ -3,6 +3,7 @@ package com.example.microservicesmariadb.websocket;
 import com.example.microservicesmariadb.dto.MessageSocket;
 import java.lang.reflect.Type;
 import java.time.ZonedDateTime;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -16,7 +17,10 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
  */
 
 @Slf4j
+@AllArgsConstructor
 public class MyStompSessionHandler extends StompSessionHandlerAdapter {
+
+  private Integer sessionId;
 
   @Override
   public Type getPayloadType(StompHeaders headers) {
@@ -26,16 +30,12 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
   @Override
   public void handleFrame(StompHeaders headers, Object payload) {
     MessageSocket msg = (MessageSocket) payload;
-    log.info("Received " + msg.getId() + " date " + msg + msg.getMC1Timestamp());
   }
 
   @Override
   public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-    log.info("New session established : " + session.getSessionId());
     session.subscribe("/topic/messages", this);
-    log.info("Subscribed to /topic/messages");
-    session.send("/app/chat", getSampleMessage());
-    log.info("Message sent to websocket server");
+    session.send("/app/chat", getSampleMessage(sessionId));
   }
 
   @Override
@@ -44,10 +44,9 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
     log.error("Exception: " + exception);
   }
 
-  private MessageSocket getSampleMessage(){
+  private MessageSocket getSampleMessage(Integer sessionId){
     MessageSocket msg = new MessageSocket();
-    msg.setId(1);
-    msg.setSessionId(1);
+    msg.setSessionId(sessionId);
     msg.setMC1Timestamp(ZonedDateTime.now().toString());
     return msg;
   }
