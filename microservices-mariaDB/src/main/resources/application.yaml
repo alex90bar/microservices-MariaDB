@@ -19,3 +19,7 @@ spring:
         dialect: org.hibernate.dialect.MariaDB103Dialect
         format_sql: true
     open-in-view: false
+
+messaging:
+  time-sec: ${TIME_SEC:5}
+  websocket-url: ws://websocket-app:8085/chat

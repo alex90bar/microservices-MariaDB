@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.Scanner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -36,6 +37,11 @@ public class MessageService {
   private Integer sessionId;
   private StompSessionHandler sessionHandler;
   private WebSocketStompClient stompClient;
+  private Long startTime;
+  @Value(value = "${messaging.time-sec}")
+  private Integer timeSec;
+  @Value(value = "${messaging.websocket-url}")
+  private String URL;
 
   {
     sessionId = 0;
@@ -45,11 +51,17 @@ public class MessageService {
     message.setEndTimestamp(ZonedDateTime.now());
     repository.save(mapper.toEntity(message));
     log.info("Message: " + message);
+
+    if ((System.currentTimeMillis() - startTime) > timeSec * 1000L) stop();
+    else nextMessage();
+  }
+
+  public void nextMessage(){
+    stompClient.connect(URL, sessionHandler);
   }
 
   public void startMessaging() {
-
-    String URL = "ws://websocket-app:8085/chat";
+    startTime = System.currentTimeMillis();
 
     WebSocketClient client = new StandardWebSocketClient();
     stompClient = new WebSocketStompClient(client);
@@ -61,9 +73,12 @@ public class MessageService {
 
   }
 
-  public Page<MessageDto> getAll(Pageable page) {
+  public void stop(){
     sessionId++;
     stompClient.stop();
+  }
+
+  public Page<MessageDto> getAll(Pageable page) {
     return repository.findAll(page).map(mapper::toDto);
   }
 }
