@@ -3,6 +3,7 @@ package com.example.microservicesmariadb.controller;
 import com.example.microservicesmariadb.dto.MessageDto;
 import com.example.microservicesmariadb.dto.MessageSocket;
 import com.example.microservicesmariadb.service.MessageService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,9 +38,15 @@ public class MessageController {
     messageService.startMessaging();
   }
 
+  @GetMapping("/stop")
+  @ResponseStatus(HttpStatus.OK)
+  public void stop(){
+    messageService.pushStop();
+  }
+
   @GetMapping("/messages")
-  public ResponseEntity<Page<MessageDto>> getAll(Pageable page){
-    return ResponseEntity.ok(messageService.getAll(page));
+  public ResponseEntity<List<MessageDto>> getAll(){
+    return ResponseEntity.ok(messageService.getAll());
   }
 
 

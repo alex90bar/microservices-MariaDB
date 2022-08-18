@@ -11,7 +11,7 @@ spring:
     password: maria
 
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: create-drop
     properties:
@@ -21,5 +21,5 @@ spring:
     open-in-view: false
 
 messaging:
-  time-sec: ${TIME_SEC:5}
+  time-sec: ${TIME_SEC:10}
   websocket-url: ws://websocket-app:8085/chat

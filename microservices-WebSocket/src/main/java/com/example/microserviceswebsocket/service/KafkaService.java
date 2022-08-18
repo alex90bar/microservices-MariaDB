@@ -3,7 +3,6 @@ package com.example.microserviceswebsocket.service;
 import com.example.microserviceswebsocket.dto.MessageSocket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,6 @@ public class KafkaService {
 
   public void sendMessage(MessageSocket msg) {
     kafkaTemplate.send("microservices", msg);
-    log.info("Message sent: " + msg);
   }
 
 }

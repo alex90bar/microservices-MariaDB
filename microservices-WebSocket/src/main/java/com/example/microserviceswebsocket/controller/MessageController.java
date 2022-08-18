@@ -23,7 +23,6 @@ public class MessageController {
 
   @MessageMapping("/chat")
   public void send(MessageSocket message) throws Exception {
-    log.info("Message got: " + message.toString());
     message.setMC2Timestamp(ZonedDateTime.now().toString());
     kafkaService.sendMessage(message);
   }

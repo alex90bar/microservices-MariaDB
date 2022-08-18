@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 /**
  * KafkaService
@@ -24,7 +23,6 @@ public class KafkaService {
 
   @KafkaListener(topics = "microservices", groupId = "messaging")
   public void listenGroupFoo(MessageSocket message) {
-    log.info("Received Message in group messaging: " + message.toString());
     message.setMC3Timestamp(ZonedDateTime.now().toString());
     feignMariaClient.postMessage(message);
   }
